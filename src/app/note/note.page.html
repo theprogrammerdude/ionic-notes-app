@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-back-button slot="start"></ion-back-button>
+    <ion-title>{{note.title}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="ion-text-center">
+    <ion-card-header>
+      <ion-card-title
+        ><b>Note Title: </b>
+        <span *ngIf="!isEditing">{{note.title}}</span>
+      </ion-card-title>
+      <ion-item *ngIf="isEditing">
+        <ion-input
+          value="{{note.title}}"
+          #title
+          clear-input="true"
+          required="true"
+          minlength="3"
+          maxlength="30"
+        ></ion-input>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content
+      ><b>Note Description: </b>
+      <span *ngIf="!isEditing">{{note.desc}}</span>
+    </ion-card-content>
+    <ion-item *ngIf="isEditing">
+      <ion-textarea
+        value="{{note.desc}}"
+        #desc
+        required="true"
+        minlength="3"
+        maxlength="5000"
+      ></ion-textarea>
+    </ion-item>
+    <ion-button
+      fill="outline"
+      expand="block"
+      (click)="toggleEdit()"
+      *ngIf="!isEditing"
+      size="medium"
+    >
+      <ion-icon name="pencil-outline"></ion-icon>&nbsp; Edit Note</ion-button
+    >
+    <ion-button
+      fill="outline"
+      expand="block"
+      (click)="saveEdit()"
+      *ngIf="isEditing"
+      size="medium"
+      color="success"
+    >
+      <ion-icon name="save"></ion-icon>&nbsp; Save Note</ion-button
+    >
+    <ion-button
+      fill="outline"
+      expand="block"
+      (click)="delete()"
+      size="medium"
+      color="danger"
+    >
+      <ion-icon name="trash-outline"></ion-icon>&nbsp; Delete Note</ion-button
+    >
+  </ion-card>
+</ion-content>

@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="register-fields">
+    <h2>Register to Notes</h2>
+    <ion-item>
+      <ion-label position="floating">Name</ion-label>
+      <ion-input
+        [(ngModel)]="name"
+        type="name"
+        required="true"
+        maxlength="20"
+        minlength="3"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input [(ngModel)]="email" type="email" required="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input
+        [(ngModel)]="password"
+        type="password"
+        required="true"
+        *ngIf="!show"
+      ></ion-input>
+      <ion-input
+        [(ngModel)]="password"
+        type="text"
+        required="true"
+        *ngIf="show"
+      ></ion-input>
+      <ion-icon
+        name="eye"
+        slot="end"
+        class="ion-align-self-end"
+        color="primary"
+        *ngIf="!show"
+        (click)="togglePassword()"
+      ></ion-icon>
+      <ion-icon
+        name="eye-off"
+        slot="end"
+        class="ion-align-self-end"
+        color="primary"
+        *ngIf="show"
+        (click)="togglePassword()"
+      ></ion-icon>
+    </ion-item>
+    <ion-button fill="outline" (click)="register()" expand="block" size="large"
+      >Register</ion-button
+    >
+    <ion-text>
+      Already have an Account?
+      <a [routerLink]="['/login']" routerLinkActive="router-link-active"
+        >Login</a
+      >
+      here
+    </ion-text>
+  </div>
+</ion-content>

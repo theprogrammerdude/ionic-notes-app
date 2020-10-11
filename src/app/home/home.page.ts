@@ -1,39 +1,91 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { AngularFireAuth } from "@angular/fire/auth";
+import {
+  AngularFirestore,
+  AngularFirestoreDocument,
+} from "@angular/fire/firestore";
+import { Router } from "@angular/router";
+import { MenuController } from "@ionic/angular";
+import { firestore } from "firebase";
 
 @Component({
   selector: "app-home",
   templateUrl: "home.page.html",
   styleUrls: ["home.page.scss"],
 })
-export class HomePage {
-  note: string = "";
+export class HomePage implements OnInit {
+  title: string = "";
+  desc: string = "";
   notes: any[] = [];
+  uid: string = localStorage.getItem("uid");
+  userRef: AngularFirestoreDocument;
+  userSub;
 
-  constructor() {}
+  constructor(
+    private db: AngularFirestore,
+    private afAuth: AngularFireAuth,
+    private router: Router,
+    private menuCtrl: MenuController
+  ) {}
+
+  ngOnInit() {}
 
   ionViewWillEnter() {
-    if (localStorage.getItem("notes")) {
-      this.notes = JSON.parse(localStorage.getItem("notes"));
-    }
+    this.userRef = this.db.doc(`users/${this.uid}`);
+
+    this.userSub = this.userRef.valueChanges().subscribe((val) => {
+      this.notes = val.notes;
+    });
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
   }
 
   addNote() {
-    if (this.note != "") {
-      let data = { note: this.note };
-      this.notes.push(data);
-      localStorage.setItem("notes", JSON.stringify(this.notes));
+    const id = Math.random().toString(36).substring(7);
+
+    if (this.desc !== "" && this.title !== "") {
+      this.db.doc(`users/${this.uid}`).set(
+        {
+          notes: firestore.FieldValue.arrayUnion({
+            id,
+            title: this.title,
+            desc: this.desc,
+          }),
+        },
+        { merge: true }
+      );
     }
 
-    this.note = "";
+    this.title = this.desc = "";
   }
 
-  deleteNote(i: number) {
-    this.notes.splice(i, 1);
-    localStorage.setItem("notes", JSON.stringify(this.notes));
+  deleteNote(note) {
+    this.db.doc(`users/${this.uid}`).update({
+      notes: firestore.FieldValue.arrayRemove({
+        id: note.id,
+        title: note.title,
+        desc: note.desc,
+      }),
+    });
   }
 
   deleteAll() {
-    this.notes = [];
-    localStorage.setItem("notes", JSON.stringify(this.notes));
+    this.db.doc(`users/${this.uid}`).set(
+      {
+        notes: [],
+      },
+      { merge: true }
+    );
+  }
+
+  gotoNote(note) {
+    this.router.navigate([`/note/${note.id}`], { queryParams: note });
+  }
+
+  openMenu() {
+    this.menuCtrl.enable(true, "menu1");
+    this.menuCtrl.open("menu1");
   }
 }

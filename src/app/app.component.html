@@ -1,3 +1,28 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu side="start" menuId="menu1" contentId="main">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title class="ion-text-center">Notes</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-text class="ion-text-center">
+          <h3>Welcome to Notes App</h3>
+          <p>Now it is easier to maintain all your notes at one place</p>
+        </ion-text>
+        <ion-item-divider></ion-item-divider>
+      </ion-list>
+    </ion-content>
+    <ion-footer>
+      <div class="ion-text-center">
+        <ion-button (click)="logout()" fill="clear">
+          <ion-icon name="log-out-outline" color="danger"></ion-icon>&nbsp;
+          Logout
+        </ion-button>
+      </div>
+    </ion-footer>
+  </ion-menu>
+
+  <ion-router-outlet id="main"></ion-router-outlet>
 </ion-app>

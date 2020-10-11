@@ -1,0 +1,14 @@
+.login-fields {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.login-fields ion-button,
+ion-item {
+  width: 90%;
+}
